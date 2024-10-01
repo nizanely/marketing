@@ -1,0 +1,174 @@
+import React, { useState } from 'react';
+import './AdvancedSchoolMarketingPrompts.css';
+
+const AdvancedSchoolMarketingPrompts = () => {
+  const [stage, setStage] = useState('');
+  const [sector, setSector] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    schoolName: '',
+    location: '',
+    educationalApproach: '',
+    uniquePrograms: '',
+    targetAudience: '',
+  });
+  const [generatedPrompts, setGeneratedPrompts] = useState(null);
+
+  const handleStageChange = (e) => {
+    setStage(e.target.value);
+    setShowForm(false);
+  };
+
+  const handleSectorChange = (e) => {
+    setSector(e.target.value);
+    setShowForm(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const generatePrompts = () => {
+    const prompts = {
+      socialMedia: `כתוב 5 פוסטים לרשתות חברתיות עבור ${formData.schoolName} (${stage} ${sector}). הפוסטים צריכים:
+- להדגיש את הגישה החינוכית הייחודית: ${formData.educationalApproach}
+- לציין את התוכניות הייחודיות: ${formData.uniquePrograms}
+- להיות מותאמים לקהל היעד: ${formData.targetAudience}
+- לכלול קריאה לפעולה ברורה
+- להיות באורך של 50-100 מילים כל אחד`,
+      emailCampaign: `צור תבנית לקמפיין דוא"ל המזמין הורים לרשום את ילדיהם ל${formData.schoolName} (${stage} ${sector}). הדוא"ל צריך:
+- לפתוח עם פנייה אישית
+- להדגיש את היתרונות הייחודיים של המוסד החינוכי, כולל ${formData.educationalApproach}
+- לכלול מידע על התוכניות הייחודיות: ${formData.uniquePrograms}
+- להזמין להשתתף ביום פתוח או לתאם סיור
+- לסיים עם קריאה לפעולה ברורה
+- להיות באורך של כ-200 מילים`,
+      websiteContent: `כתוב תוכן לעמוד 'אודות' באתר של ${formData.schoolName} (${stage} ${sector}). התוכן צריך:
+- לפתוח עם משפט מושך המתאר את החזון של המוסד החינוכי
+- לתאר בקצרה את ההיסטוריה והמיקום של המוסד החינוכי ב${formData.location}
+- להסביר את הגישה החינוכית הייחודית: ${formData.educationalApproach}
+- לפרט את התוכניות הייחודיות: ${formData.uniquePrograms}
+- לכלול ציטוט או סיפור הצלחה של תלמיד או הורה
+- לסיים עם הזמנה ליצירת קשר או ביקור
+- להיות באורך של כ-300 מילים`,
+    };
+    setGeneratedPrompts(prompts);
+  };
+
+  return (
+    <div className="p-4 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-center">מחולל פרומפטים לשיווק מוסדות חינוך</h1>
+      
+      <div className="mb-4">
+        <label className="block mb-2">בחר שלב חינוך:</label>
+        <select 
+          value={stage} 
+          onChange={handleStageChange}
+          className="w-full p-2 border rounded"
+        >
+          <option value="">בחר...</option>
+          <option value="גן">גן</option>
+          <option value="בית ספר יסודי">בית ספר יסודי</option>
+          <option value="בית ספר על יסודי">בית ספר על יסודי</option>
+        </select>
+      </div>
+
+      {stage && (
+        <div className="mb-4">
+          <label className="block mb-2">בחר מגזר:</label>
+          <select 
+            value={sector} 
+            onChange={handleSectorChange}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">בחר...</option>
+            <option value="ממלכתי">ממלכתי (לא דתי)</option>
+            <option value="ממלכתי דתי">ממלכתי דתי</option>
+            <option value="חרדי">חרדי</option>
+          </select>
+        </div>
+      )}
+
+      {showForm && (
+        <form className="space-y-4">
+          <div>
+            <label className="block mb-1">שם המוסד החינוכי:</label>
+            <input
+              name="schoolName"
+              value={formData.schoolName}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">מיקום:</label>
+            <input
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">גישה חינוכית:</label>
+            <input
+              name="educationalApproach"
+              value={formData.educationalApproach}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">תוכניות ייחודיות:</label>
+            <textarea
+              name="uniquePrograms"
+              value={formData.uniquePrograms}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">קהל יעד:</label>
+            <input
+              name="targetAudience"
+              value={formData.targetAudience}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <button 
+            onClick={generatePrompts} 
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+            type="button"
+          >
+            צור פרומפטים
+          </button>
+        </form>
+      )}
+      
+      {generatedPrompts && (
+        <div className="mt-6 space-y-6">
+          <h2 className="text-xl font-semibold mb-2">פרומפטים שנוצרו:</h2>
+          {Object.entries(generatedPrompts).map(([key, prompt]) => (
+            <div key={key} className="bg-gray-100 p-4 rounded">
+              <h3 className="font-semibold mb-2">{key === 'socialMedia' ? 'פרומפט לרשתות חברתיות' : 
+                                                  key === 'emailCampaign' ? 'פרומפט לקמפיין דוא"ל' : 
+                                                  'פרומפט לתוכן אתר'}:</h3>
+              <p className="whitespace-pre-line">{prompt}</p>
+            </div>
+          ))}
+          <div className="bg-yellow-100 p-4 rounded">
+            <p>להעתקת הפרומפטים והשימוש בהם, אנא בקרו באחד מהאתרים הבאים:</p>
+            <ul className="list-disc list-inside mt-2">
+              <li><a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">ChatGPT</a></li>
+              <li><a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Claude</a></li>
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdvancedSchoolMarketingPrompts;
