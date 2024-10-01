@@ -1,174 +1,208 @@
-import React, { useState } from 'react';
-import './TrendyStyleSchoolMarketingPrompts.css';
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחולל פרומפטים לשיווק מוסדות חינוך</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&display=swap');
 
-const AdvancedSchoolMarketingPrompts = () => {
-  const [stage, setStage] = useState('');
-  const [sector, setSector] = useState('');
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    schoolName: '',
-    location: '',
-    educationalApproach: '',
-    uniquePrograms: '',
-    targetAudience: '',
-  });
-  const [generatedPrompts, setGeneratedPrompts] = useState(null);
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
 
-  const handleStageChange = (e) => {
-    setStage(e.target.value);
-    setShowForm(false);
-  };
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
 
-  const handleSectorChange = (e) => {
-    setSector(e.target.value);
-    setShowForm(true);
-  };
+        h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+        .form-section {
+            margin-bottom: 30px;
+        }
 
-  const generatePrompts = () => {
-    const prompts = {
-      socialMedia: `כתוב 5 פוסטים לרשתות חברתיות עבור ${formData.schoolName} (${stage} ${sector}). הפוסטים צריכים:
-- להדגיש את הגישה החינוכית הייחודית: ${formData.educationalApproach}
-- לציין את התוכניות הייחודיות: ${formData.uniquePrograms}
-- להיות מותאמים לקהל היעד: ${formData.targetAudience}
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .prompt-container {
+            background-color: #f1f8ff;
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .prompt-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .copy-instruction {
+            background-color: #e1f5fe;
+            border: 1px solid #4fc3f7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .copy-instruction a {
+            color: #0277bd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .copy-instruction a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>מחולל פרומפטים לשיווק מוסדות חינוך</h1>
+        
+        <div class="form-section">
+            <label for="educationStage">בחר שלב חינוך:</label>
+            <select id="educationStage">
+                <option value="">בחר...</option>
+                <option value="גן">גן</option>
+                <option value="בית ספר יסודי">בית ספר יסודי</option>
+                <option value="בית ספר על יסודי">בית ספר על יסודי</option>
+            </select>
+
+            <label for="sector">בחר מגזר:</label>
+            <select id="sector">
+                <option value="">בחר...</option>
+                <option value="ממלכתי">ממלכתי (לא דתי)</option>
+                <option value="ממלכתי דתי">ממלכתי דתי</option>
+                <option value="חרדי">חרדי</option>
+            </select>
+
+            <label for="schoolName">שם המוסד החינוכי:</label>
+            <input type="text" id="schoolName">
+
+            <label for="location">מיקום:</label>
+            <input type="text" id="location">
+
+            <label for="approach">גישה חינוכית:</label>
+            <input type="text" id="approach">
+
+            <label for="programs">תוכניות ייחודיות:</label>
+            <textarea id="programs"></textarea>
+
+            <label for="audience">קהל יעד:</label>
+            <input type="text" id="audience">
+
+            <button onclick="generatePrompts()">צור פרומפטים</button>
+        </div>
+
+        <div id="promptsOutput"></div>
+    </div>
+
+    <script>
+        function generatePrompts() {
+            const stage = document.getElementById('educationStage').value;
+            const sector = document.getElementById('sector').value;
+            const schoolName = document.getElementById('schoolName').value;
+            const location = document.getElementById('location').value;
+            const approach = document.getElementById('approach').value;
+            const programs = document.getElementById('programs').value;
+            const audience = document.getElementById('audience').value;
+
+            const socialMediaPrompt = `כתוב 5 פוסטים לרשתות חברתיות עבור ${schoolName} (${stage} ${sector}). הפוסטים צריכים:
+- להדגיש את הגישה החינוכית הייחודית: ${approach}
+- לציין את התוכניות הייחודיות: ${programs}
+- להיות מותאמים לקהל היעד: ${audience}
 - לכלול קריאה לפעולה ברורה
-- להיות באורך של 50-100 מילים כל אחד`,
-      emailCampaign: `צור תבנית לקמפיין דוא"ל המזמין הורים לרשום את ילדיהם ל${formData.schoolName} (${stage} ${sector}). הדוא"ל צריך:
+- להיות באורך של 50-100 מילים כל אחד`;
+
+            const emailPrompt = `צור תבנית לקמפיין דוא"ל המזמין הורים לרשום את ילדיהם ל${schoolName} (${stage} ${sector}). הדוא"ל צריך:
 - לפתוח עם פנייה אישית
-- להדגיש את היתרונות הייחודיים של המוסד החינוכי, כולל ${formData.educationalApproach}
-- לכלול מידע על התוכניות הייחודיות: ${formData.uniquePrograms}
+- להדגיש את היתרונות הייחודיים של המוסד החינוכי, כולל ${approach}
+- לכלול מידע על התוכניות הייחודיות: ${programs}
 - להזמין להשתתף ביום פתוח או לתאם סיור
 - לסיים עם קריאה לפעולה ברורה
-- להיות באורך של כ-200 מילים`,
-      websiteContent: `כתוב תוכן לעמוד 'אודות' באתר של ${formData.schoolName} (${stage} ${sector}). התוכן צריך:
+- להיות באורך של כ-200 מילים`;
+
+            const websitePrompt = `כתוב תוכן לעמוד 'אודות' באתר של ${schoolName} (${stage} ${sector}). התוכן צריך:
 - לפתוח עם משפט מושך המתאר את החזון של המוסד החינוכי
-- לתאר בקצרה את ההיסטוריה והמיקום של המוסד החינוכי ב${formData.location}
-- להסביר את הגישה החינוכית הייחודית: ${formData.educationalApproach}
-- לפרט את התוכניות הייחודיות: ${formData.uniquePrograms}
+- לתאר בקצרה את ההיסטוריה והמיקום של המוסד החינוכי ב${location}
+- להסביר את הגישה החינוכית הייחודית: ${approach}
+- לפרט את התוכניות הייחודיות: ${programs}
 - לכלול ציטוט או סיפור הצלחה של תלמיד או הורה
 - לסיים עם הזמנה ליצירת קשר או ביקור
-- להיות באורך של כ-300 מילים`,
-    };
-    setGeneratedPrompts(prompts);
-  };
+- להיות באורך של כ-300 מילים`;
 
-  return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">מחולל פרומפטים לשיווק מוסדות חינוך</h1>
-      
-      <div className="mb-4">
-        <label className="block mb-2">בחר שלב חינוך:</label>
-        <select 
-          value={stage} 
-          onChange={handleStageChange}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">בחר...</option>
-          <option value="גן">גן</option>
-          <option value="בית ספר יסודי">בית ספר יסודי</option>
-          <option value="בית ספר על יסודי">בית ספר על יסודי</option>
-        </select>
-      </div>
+            const outputHTML = `
+                <div class="prompt-container">
+                    <div class="prompt-title">פרומפט לרשתות חברתיות:</div>
+                    <p>${socialMediaPrompt}</p>
+                </div>
+                <div class="prompt-container">
+                    <div class="prompt-title">פרומפט לקמפיין דוא"ל:</div>
+                    <p>${emailPrompt}</p>
+                </div>
+                <div class="prompt-container">
+                    <div class="prompt-title">פרומפט לתוכן אתר:</div>
+                    <p>${websitePrompt}</p>
+                </div>
+                <div class="copy-instruction">
+                    <p>להעתקת הפרומפטים והשימוש בהם, אנא בקרו באחד מהאתרים הבאים:</p>
+                    <ul>
+                        <li><a href="https://chat.openai.com" target="_blank">ChatGPT</a></li>
+                        <li><a href="https://www.anthropic.com" target="_blank">Claude</a></li>
+                    </ul>
+                </div>
+            `;
 
-      {stage && (
-        <div className="mb-4">
-          <label className="block mb-2">בחר מגזר:</label>
-          <select 
-            value={sector} 
-            onChange={handleSectorChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">בחר...</option>
-            <option value="ממלכתי">ממלכתי (לא דתי)</option>
-            <option value="ממלכתי דתי">ממלכתי דתי</option>
-            <option value="חרדי">חרדי</option>
-          </select>
-        </div>
-      )}
-
-      {showForm && (
-        <form className="space-y-4">
-          <div>
-            <label className="block mb-1">שם המוסד החינוכי:</label>
-            <input
-              name="schoolName"
-              value={formData.schoolName}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1">מיקום:</label>
-            <input
-              name="location"
-              value={formData.location}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1">גישה חינוכית:</label>
-            <input
-              name="educationalApproach"
-              value={formData.educationalApproach}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1">תוכניות ייחודיות:</label>
-            <textarea
-              name="uniquePrograms"
-              value={formData.uniquePrograms}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1">קהל יעד:</label>
-            <input
-              name="targetAudience"
-              value={formData.targetAudience}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <button 
-            onClick={generatePrompts} 
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
-            type="button"
-          >
-            צור פרומפטים
-          </button>
-        </form>
-      )}
-      
-      {generatedPrompts && (
-        <div className="mt-6 space-y-6">
-          <h2 className="text-xl font-semibold mb-2">פרומפטים שנוצרו:</h2>
-          {Object.entries(generatedPrompts).map(([key, prompt]) => (
-            <div key={key} className="bg-gray-100 p-4 rounded">
-              <h3 className="font-semibold mb-2">{key === 'socialMedia' ? 'פרומפט לרשתות חברתיות' : 
-                                                  key === 'emailCampaign' ? 'פרומפט לקמפיין דוא"ל' : 
-                                                  'פרומפט לתוכן אתר'}:</h3>
-              <p className="whitespace-pre-line">{prompt}</p>
-            </div>
-          ))}
-          <div className="bg-yellow-100 p-4 rounded">
-            <p>להעתקת הפרומפטים והשימוש בהם, אנא בקרו באחד מהאתרים הבאים:</p>
-            <ul className="list-disc list-inside mt-2">
-              <li><a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">ChatGPT</a></li>
-              <li><a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Claude</a></li>
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default AdvancedSchoolMarketingPrompts;
+            document.getElementById('promptsOutput').innerHTML = outputHTML;
+        }
+    </script>
+</body>
+</html>
